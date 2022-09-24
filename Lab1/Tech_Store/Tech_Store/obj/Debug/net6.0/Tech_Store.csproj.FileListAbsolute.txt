@@ -1,0 +1,12 @@
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\bin\Debug\net6.0\Tech_Store.deps.json
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\bin\Debug\net6.0\Tech_Store.dll
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\bin\Debug\net6.0\Tech_Store.pdb
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.csproj.AssemblyReference.cache
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.GeneratedMSBuildEditorConfig.editorconfig
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.AssemblyInfoInputs.cache
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.AssemblyInfo.cs
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.csproj.CoreCompileInputs.cache
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.dll
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\refint\Tech_Store.dll
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\Tech_Store.pdb
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\Tech_Store\obj\Debug\net6.0\ref\Tech_Store.dll
