@@ -16,3 +16,5 @@ D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\
 D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\ConsoleApp\bin\Debug\net6.0\Tech_Store.dll
 D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\ConsoleApp\bin\Debug\net6.0\Tech_Store.pdb
 D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\ConsoleApp\obj\Debug\net6.0\ConsoleApp.csproj.CopyComplete
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\ConsoleApp\bin\Debug\net6.0\Devices.dll
+D:\universidad\3er Año\2do SEMESTRE\Optativa I (Programación Avanzada)\Github\Melchor-Perez\Lab1\Tech_Store\ConsoleApp\bin\Debug\net6.0\Devices.pdb

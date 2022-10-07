@@ -1,21 +1,27 @@
 ﻿using Tech_Store;
+using Devices;
 
-DateTime d = DateTime.Now;
-Laptop l = new ((EBrand)1, 12, d, 23.5, (EGPU)0, (ECPU)0,(ELaptopStorage)0);
-l.ShowAllProps();
-System.Console.WriteLine("Introduzca la marca: ");
+EBrand brand = EBrand.LG;
+float price = 200;
+DateTime date = DateTime.Now;
+EMobileDataGen mdg = EMobileDataGen.LTE;
+short cr = 12;
+EMobileStorage storage = EMobileStorage._256gB;
 
-try
-{
+Mobile_Phone mobile1 = new Mobile_Phone(brand, price, date, mdg, cr, storage);
+Store tech = new Store();
+tech.AddMobilePhone(mobile1);
 
-    l.Brand = (EBrand)int.Parse(System.Console.ReadLine());
+Mobile_Phone mobile = new Mobile_Phone((Mobile_Phone)tech.GetElementAt(0));
 
-}catch(FormatException e)
-{
+Console.WriteLine(mobile.Brand);
+Console.WriteLine(mobile.Price);
+Console.WriteLine(mobile.Date);
+Console.WriteLine(mobile.MobileDataGen);
+Console.WriteLine(mobile.CameraRes);
+Console.WriteLine(mobile.Storage);
 
-    System.Console.WriteLine($"Excepcion: {e.Message.ToString()}");
 
-}
 
-l.ShowAllProps();
+
 

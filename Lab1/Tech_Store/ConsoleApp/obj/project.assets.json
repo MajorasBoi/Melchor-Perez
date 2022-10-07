@@ -2,9 +2,22 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Devices/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Devices.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Devices.dll": {}
+        }
+      },
       "Tech_Store/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Devices": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Tech_Store.dll": {}
         },
@@ -15,6 +28,11 @@
     }
   },
   "libraries": {
+    "Devices/1.0.0": {
+      "type": "project",
+      "path": "../Devices/Devices.csproj",
+      "msbuildProject": "../Devices/Devices.csproj"
+    },
     "Tech_Store/1.0.0": {
       "type": "project",
       "path": "../Tech_Store/Tech_Store.csproj",
@@ -23,6 +41,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Devices >= 1.0.0",
       "Tech_Store >= 1.0.0"
     ]
   },
@@ -53,6 +72,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+            "D:\\universidad\\3er Año\\2do SEMESTRE\\Optativa I (Programación Avanzada)\\Github\\Melchor-Perez\\Lab1\\Tech_Store\\Devices\\Devices.csproj": {
+              "projectPath": "D:\\universidad\\3er Año\\2do SEMESTRE\\Optativa I (Programación Avanzada)\\Github\\Melchor-Perez\\Lab1\\Tech_Store\\Devices\\Devices.csproj"
+            },
             "D:\\universidad\\3er Año\\2do SEMESTRE\\Optativa I (Programación Avanzada)\\Github\\Melchor-Perez\\Lab1\\Tech_Store\\Tech_Store\\Tech_Store.csproj": {
               "projectPath": "D:\\universidad\\3er Año\\2do SEMESTRE\\Optativa I (Programación Avanzada)\\Github\\Melchor-Perez\\Lab1\\Tech_Store\\Tech_Store\\Tech_Store.csproj"
             }

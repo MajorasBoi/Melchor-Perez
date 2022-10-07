@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "Tech_Store/1.0.0": {
+        "dependencies": {
+          "Devices": "1.0.0"
+        },
         "runtime": {
           "Tech_Store.dll": {}
+        }
+      },
+      "Devices/1.0.0": {
+        "runtime": {
+          "Devices.dll": {}
         }
       }
     }
   },
   "libraries": {
     "Tech_Store/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Devices/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
