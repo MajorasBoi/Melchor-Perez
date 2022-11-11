@@ -12,7 +12,7 @@ namespace TestRepository
 
         public MobileRepositoryTests()
         {
-            var connectionString = @"Data Source=MELCHOR;Initial Catalog=HumanResourcesDB;User ID=sa;Password=americanpie248";
+            var connectionString = @"Data Source=MELCHOR;Initial Catalog=HumanResourcesDB;User ID=sa;Password=***";
             _repository = new DBRepository(connectionString);
         }
 

@@ -55,7 +55,7 @@ namespace Repository
             var optionsBuilder = new DbContextOptionsBuilder<RepositoryContext>();
             try
             {
-                var connectionString = @"Data Source=MELCHOR;Initial Catalog=HumanResourcesDB;User ID=sa;Password=americanpie248";
+                var connectionString = @"Data Source=MELCHOR;Initial Catalog=HumanResourcesDB;User ID=sa;Password=***";
                 optionsBuilder.UseSqlServer(connectionString);
             }
             catch (Exception)
