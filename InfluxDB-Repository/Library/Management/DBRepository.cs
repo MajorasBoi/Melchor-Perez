@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
-using Task = System.Threading.Tasks.Task;
+using InfluxDB.Client.Core.Flux.Domain;
+using InfluxDB.Client.Writes;
 
 namespace Management
 {
-    public static class ManageBuckets
+    public class DBRepository: IRepository
     {
-        public static async Task Main()
+        public async Task CreateBucket()
         {
-
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             const string org = "Development";
