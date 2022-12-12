@@ -1,4 +1,8 @@
 ﻿using System;
+using InfluxDB.Client;
+using InfluxDB.Client.Api.Domain;
+using InfluxDB.Client.Core.Flux.Domain;
+using InfluxDB.Client.Writes;
 
 namespace Models
 {
@@ -26,7 +30,7 @@ namespace Models
 
         public TCondition Condition { get; set; }
         public string Title { get; set; }
-        public string Borrowed_to { get; set; }
+        public long BorrowerID { get; set; }
         public string Author { get; set; }
         public int Pages { get; set; }
         public DateTime TimeStamp { get; set; }
@@ -34,11 +38,11 @@ namespace Models
         #endregion
         #region Constructors
 
-        public Documents(TCondition condition, string title, string borrowed_to, string author, int pages, DateTime timestamp)
+        public Documents(TCondition condition, string title, long borrower, string author, int pages, DateTime timestamp)
         {
             Condition = condition;
             Title = title;
-            Borrowed_to = borrowed_to;
+            BorrowerID = borrower;
             Author = author;
             Pages = pages;
             TimeStamp = timestamp;
@@ -48,7 +52,7 @@ namespace Models
         {
             Condition=doc.Condition;
             Title = doc.Title;
-            Borrowed_to=doc.Borrowed_to;
+            BorrowerID=doc.BorrowerID;
             Author=doc.Author;
             Pages=doc.Pages;
             TimeStamp=doc.TimeStamp;
@@ -58,7 +62,7 @@ namespace Models
         {
             Condition = TCondition.Good;
             Title = "Unknown";
-            Borrowed_to = "Nobody";
+            BorrowerID = 0;
             Author = "Unknown";
             Pages = 0;
             TimeStamp = DateTime.UtcNow;
@@ -66,6 +70,9 @@ namespace Models
 
         #endregion
         #region Methods
+
+        public abstract PointData ConvertToPointData(WritePrecision precision);
+
         #endregion
     }
 
@@ -80,7 +87,7 @@ namespace Models
         #endregion
         #region Constructor
 
-        public Book(TCondition condition, string title, string borrowed_to, string author, int pages, DateTime timestamp,
+        public Book(TCondition condition, string title, long borrowed_to, string author, int pages, DateTime timestamp,
                     string editor, TGenre genre, string isbn): base(condition, title, borrowed_to, author, pages, timestamp)
         {
             Editor = editor;
@@ -88,7 +95,7 @@ namespace Models
             ISBN = isbn;
         }
 
-        public Book(Book book): base(book.Condition, book.Title, book.Borrowed_to, book.Author, book.Pages, book.TimeStamp)
+        public Book(Book book): base(book.Condition, book.Title, book.BorrowerID, book.Author, book.Pages, book.TimeStamp)
         {
             Editor=book.Editor;
             Genre=book.Genre;
@@ -99,13 +106,33 @@ namespace Models
         {
             Condition = TCondition.Good;
             Title = "Unknown";
-            Borrowed_to = "Nobody";
+            BorrowerID = 0;
             Author = "Unknown";
             Pages = 0;
             TimeStamp = DateTime.UtcNow;
             Editor = "Unknown";
             Genre = TGenre.Romance;
             ISBN = "Unknown";
+        }
+
+        #endregion
+        #region Methods
+
+        public override PointData ConvertToPointData(WritePrecision precision)
+        {
+            var point = PointData
+                .Measurement("book")
+                .Tag("title", Title)
+                .Tag("author", Author)
+                .Tag("isbn", ISBN)
+                .Field("pages", Pages)
+                .Field("borrower", BorrowerID)
+                .Tag("condition", Condition.ToString())
+                .Tag("editor", Editor)
+                .Tag("genre", Genre.ToString())
+                .Timestamp(TimeStamp, precision);
+
+            return point;
         }
 
         #endregion
@@ -116,19 +143,19 @@ namespace Models
         #region Properties
 
         public int Volume { get; set; }
-        public string DateOfRelease { get; set; }
+        public DateTime DateOfRelease { get; set; }
 
         #endregion
         #region Constructor
 
-        public Magazine(TCondition condition, string title, string borrowed_to, string author, int pages, DateTime timestamp,
-                        int volume, string date_of_release): base(condition, title, borrowed_to, author, pages, timestamp)
+        public Magazine(TCondition condition, string title, long borrowed_to, string author, int pages, DateTime timestamp,
+                        int volume, DateTime date_of_release): base(condition, title, borrowed_to, author, pages, timestamp)
         {
             Volume = volume;
             DateOfRelease = date_of_release;
         }
 
-        public Magazine(Magazine magazine): base(magazine.Condition, magazine.Title, magazine.Borrowed_to, magazine.Author, magazine.Pages, magazine.TimeStamp)
+        public Magazine(Magazine magazine): base(magazine.Condition, magazine.Title, magazine.BorrowerID, magazine.Author, magazine.Pages, magazine.TimeStamp)
         {
             Volume = magazine.Volume;
             DateOfRelease = magazine.DateOfRelease;
@@ -138,12 +165,31 @@ namespace Models
         {
             Condition = TCondition.Good;
             Title = "Unknown";
-            Borrowed_to = "Nobody";
+            BorrowerID = 0;
             Author = "Unknown";
             Pages = 0;
             TimeStamp = DateTime.UtcNow;
             Volume = 0;
-            DateOfRelease = null;
+            DateOfRelease = DateTime.UtcNow;
+        }
+
+        #endregion
+        #region Methods
+
+        public override PointData ConvertToPointData(WritePrecision precision)
+        {
+            var point = PointData
+                   .Measurement("magazine")
+                   .Tag("title", Title)
+                   .Tag("author", Author)
+                   .Tag("volume", Volume.ToString())
+                   .Field("pages", Pages)
+                   .Field("borrower", BorrowerID)
+                   .Tag("condition", Condition.ToString())
+                   //.Field("date_of_release", DateOfRelease)
+                   .Timestamp (TimeStamp, precision);
+
+            return point;
         }
 
         #endregion
