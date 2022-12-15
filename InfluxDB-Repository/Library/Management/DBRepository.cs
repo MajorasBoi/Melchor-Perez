@@ -117,5 +117,37 @@ namespace Management
                 }
             }
         }
+
+        public void QueryByMeasurement(string measurement)
+        {
+            const string url = "http://localhost:8086";
+            const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            const string org = "Development";
+            const string bucket_name = "Final_project";
+            var options = new InfluxDBClientOptions(url)
+            {
+                Token = token,
+                Org = org,
+                Bucket = bucket_name
+            };
+
+            using var client = new InfluxDBClient(options);
+
+            var flux = $"from(bucket:\"{bucket_name}\") |> range(start: 0) |> filter(fn:(r) => r[\"measurement\" == \"book\")";
+
+            var queryApi = client.GetQueryApi();
+
+            var tables = queryApi.QueryAsync(flux, "Development");
+
+            foreach (var table in tables.Result)
+            {
+                foreach (var record in table.Records)
+                {
+                    Console.WriteLine(JsonConvert.SerializeObject(record.Values));
+
+                    //Console.WriteLine($"{record.GetTime()}: {record.GetField()}: {record.GetValueByKey("_value")}");
+                }
+            }
+        }
     }
 }

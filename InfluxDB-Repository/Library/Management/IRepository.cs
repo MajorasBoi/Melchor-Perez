@@ -14,5 +14,7 @@ namespace Management
         public Task WriteData(Documents doc);
 
         public void QueryAll();
+
+        public void QueryByMeasurement(string measurement);
     }
 }

@@ -74,5 +74,14 @@ namespace TestProject
 
             tdb.QueryAll();
         }
+
+        [TestMethod]
+        public void Test_QueryByMeasurement()
+        {
+            string measurement = "book";
+            DBRepository tdb = new DBRepository();
+
+            tdb.QueryByMeasurement(measurement);
+        }
     }
 }
