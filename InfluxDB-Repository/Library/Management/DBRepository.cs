@@ -184,6 +184,55 @@ namespace Management
             }
         }
 
+        public double GetAverage(string measurement)
+        {
+            const string url = "http://localhost:8086";
+            const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            const string org = "Development";
+            const string bucket_name = "Data Center";
+            var options = new InfluxDBClientOptions(url)
+            {
+                Token = token,
+                Org = org,
+                Bucket = bucket_name
+            };
+
+            int i = 0;
+            double avg = 0;
+
+            using var client = new InfluxDBClient(options);
+
+            var flux = $"from(bucket:\"{bucket_name}\") " +
+                $"|> range(start: 0) " +
+                $"|> filter(fn:(r) => r[\"_measurement\"] == \"{measurement}\")";
+
+            var queryApi = client.GetQueryApi();
+
+            var converter = new DomainEntityConverter();
+
+            var tables = queryApi.QueryAsync(flux, "Development");
+
+            foreach (var table in tables.Result)
+            {
+                foreach (var record in table.Records)
+                {
+                    ++i;
+                    Sensor temp = new Sensor(converter.ConvertToEntity<Sensor>(record));
+                    avg += temp.Value;
+                }
+            }
+
+            avg = avg / i;
+
+            if (measurement == "Temperature")
+                Console.WriteLine(measurement + " average is: " + avg + "°C");
+            else
+                Console.WriteLine(measurement + " average percentage is: " + avg + "%");
+            
+            
+            return avg;
+        }
+
         public void DeleteData(string bucket, string organization)
         {
             string Token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";

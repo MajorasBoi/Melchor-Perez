@@ -24,7 +24,7 @@ namespace Models
 
         public EType Type { get; set; }
         public EBrand Brand { get; set; }
-        public float Value { get; set; }
+        public double Value { get; set; }
         public string Model { get; set; }
         public DateTime TimeStamp { get; set; }
         public int ID { get; set; }
@@ -32,7 +32,7 @@ namespace Models
         #endregion
         #region Constructors
 
-        public Sensor(EType type, EBrand brand, float value, string model, DateTime time, int id)
+        public Sensor(EType type, EBrand brand, double value, string model, DateTime time, int id)
         {
             Type = type;
             Brand = brand;

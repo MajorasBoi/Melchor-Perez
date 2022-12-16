@@ -19,6 +19,8 @@ namespace Management
 
         public void QueryById(int id);
 
+        public double GetAverage(string measurement);
+
         public void DeleteData(string bucket, string organization);
     }
 }

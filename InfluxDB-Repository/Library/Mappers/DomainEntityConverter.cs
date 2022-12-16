@@ -21,7 +21,7 @@ namespace Mappers
             {
                 Type = EType.Temperature,
                 Brand = EBrand.Siemens,
-                Value = (float)Convert.ToDouble(fluxRecord.GetValueByKey("value")),
+                Value = Convert.ToDouble(fluxRecord.GetValueByKey("_value")),
                 Model = Convert.ToString(fluxRecord.GetValueByKey("model")),
                 ID = Convert.ToInt32(fluxRecord.GetValueByKey("id")),
                 TimeStamp = fluxRecord.GetTime().GetValueOrDefault().ToDateTimeUtc(),

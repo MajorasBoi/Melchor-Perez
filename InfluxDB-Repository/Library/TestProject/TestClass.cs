@@ -92,6 +92,15 @@ namespace TestProject
         }
 
         [TestMethod]
+        public void Test_Average()
+        {
+            string measurement = "Humidity";
+            DBRepository tdb = new DBRepository();
+
+            Assert.AreEqual(10, tdb.GetAverage(measurement));
+        }
+
+        [TestMethod]
         public void Test_DeleteAll()
         {
             string bucket = "Data Center";
