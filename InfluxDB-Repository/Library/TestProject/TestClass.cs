@@ -27,16 +27,15 @@ namespace TestProject
         }
 
         [TestMethod]
-        public void Test_WriteBook()
+        public void Test_AddTemperaturePoint()
         {
             DBRepository tdb = new DBRepository();
 
-            Book book = new Book(TCondition.Excellent, "Hello", 000915, "Sade", 200, DateTime.UtcNow, 
-                                "Belkis", TGenre.Tails, "24");
+            Sensor sensor = new Sensor(EType.Temperature, EBrand.Siemens, 15, "ABC", DateTime.UtcNow, 5);
 
             try
             {
-                tdb.WriteData(book).Wait();
+                tdb.WriteData(sensor).Wait();
             }
             catch
             {
@@ -48,16 +47,15 @@ namespace TestProject
         }
 
         [TestMethod]
-        public void Test_WriteMagazine()
+        public void Test_AddHumidityPoint()
         {
             DBRepository tdb = new DBRepository();
 
-            Magazine magazine = new Magazine(TCondition.Good, "Rolling Stones", 010731, "Rolling Stones", 
-                                        10, DateTime.UtcNow, 2, DateTime.Now);
+            Sensor sensor = new Sensor(EType.Humidity, EBrand.EndressHauser, 10, "DEF", DateTime.UtcNow, 5);
 
             try
             {
-                tdb.WriteData(magazine).Wait();
+                tdb.WriteData(sensor).Wait();
             }
             catch
             {
@@ -78,10 +76,29 @@ namespace TestProject
         [TestMethod]
         public void Test_QueryByMeasurement()
         {
-            string measurement = "book";
+            string measurement = "Temperature";
             DBRepository tdb = new DBRepository();
 
             tdb.QueryByMeasurement(measurement);
+        }
+
+        [TestMethod]
+        public void Test_QueryById()
+        {
+            int id = 5;
+            DBRepository tdb = new DBRepository();
+
+            tdb.QueryById(id);
+        }
+
+        [TestMethod]
+        public void Test_DeleteAll()
+        {
+            string bucket = "Data Center";
+            string organization = "Development";
+            DBRepository tdb = new DBRepository();
+
+            tdb.DeleteData(bucket, organization);
         }
     }
 }

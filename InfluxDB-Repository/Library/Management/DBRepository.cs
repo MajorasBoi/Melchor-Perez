@@ -10,10 +10,10 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core.Flux.Domain;
 using InfluxDB.Client.Writes;
 using Models;
+using Mappers;
 
 namespace Management
 {
-    
     public class DBRepository: IRepository
     {
         public async Task CreateBucket()
@@ -21,7 +21,7 @@ namespace Management
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             const string org = "Development";
-            const string bucket_name = "Final_project";
+            const string bucket_name = "Data Center";
             var options = new InfluxDBClientOptions(url)
             {
                 Token = token,
@@ -59,17 +59,15 @@ namespace Management
             //
             // Created token that can be use for writes to "iot_bucket"
             //
-            Console.WriteLine($"Authorized token to write into Final_project: {authorization.Token}");
+            Console.WriteLine($"Authorized token to write into Data Center: {authorization.Token}");
         }
 
-        public async Task WriteData(Documents doc)
+        public async Task WriteData(Sensor sensor)
         {
-            var point = doc.ConvertToPointData(WritePrecision.S);
-
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             const string org = "Development";
-            const string bucket_name = "Final_project";
+            const string bucket_name = "Data Center";
             var options = new InfluxDBClientOptions(url)
             {
                 Token = token,
@@ -78,11 +76,11 @@ namespace Management
             };
 
             using var client = new InfluxDBClient(options);
+            var converter = new DomainEntityConverter();
 
-            using (var writeApi = client.GetWriteApi())
-            {
-                writeApi.WritePoint(point, bucket_name, org);
-            }
+            await client.GetWriteApiAsync(converter).WriteMeasurementAsync(sensor);
+
+            Console.WriteLine("Successfully written point!");
 
         }
 
@@ -91,7 +89,7 @@ namespace Management
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             const string org = "Development";
-            const string bucket_name = "Final_project";
+            const string bucket_name = "Data Center";
             var options = new InfluxDBClientOptions(url)
             {
                 Token = token,
@@ -101,7 +99,9 @@ namespace Management
 
             using var client = new InfluxDBClient(options);
 
-            var flux = "from(bucket:\"Final_project\") |> range(start: 0)";
+            var flux = $"from(bucket:\"{bucket_name}\") |> range(start: 0)";
+
+            var converter = new DomainEntityConverter();
 
             var queryApi = client.GetQueryApi();
 
@@ -111,9 +111,7 @@ namespace Management
             {
                 foreach(var record in table.Records)
                 {
-                    Console.WriteLine(JsonConvert.SerializeObject(record.Values));
-
-                    //Console.WriteLine($"{record.GetTime()}: {record.GetField()}: {record.GetValueByKey("_value")}");
+                    Console.WriteLine(JsonConvert.SerializeObject(converter.ConvertToEntity<Sensor>(record)));
                 }
             }
         }
@@ -123,7 +121,7 @@ namespace Management
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             const string org = "Development";
-            const string bucket_name = "Final_project";
+            const string bucket_name = "Data Center";
             var options = new InfluxDBClientOptions(url)
             {
                 Token = token,
@@ -133,9 +131,13 @@ namespace Management
 
             using var client = new InfluxDBClient(options);
 
-            var flux = $"from(bucket:\"{bucket_name}\") |> range(start: 0) |> filter(fn:(r) => r[\"measurement\" == \"book\")";
+            var flux = $"from(bucket:\"{bucket_name}\") " +
+                $"|> range(start: 0) " +
+                $"|> filter(fn:(r) => r[\"_measurement\"] == \"{measurement}\")";
 
             var queryApi = client.GetQueryApi();
+
+            var converter = new DomainEntityConverter();
 
             var tables = queryApi.QueryAsync(flux, "Development");
 
@@ -143,11 +145,53 @@ namespace Management
             {
                 foreach (var record in table.Records)
                 {
-                    Console.WriteLine(JsonConvert.SerializeObject(record.Values));
-
-                    //Console.WriteLine($"{record.GetTime()}: {record.GetField()}: {record.GetValueByKey("_value")}");
+                    Console.WriteLine(JsonConvert.SerializeObject(converter.ConvertToEntity<Sensor>(record)));
                 }
             }
         }
+
+        public void QueryById(int id)
+        {
+            const string url = "http://localhost:8086";
+            const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            const string org = "Development";
+            const string bucket_name = "Data Center";
+            var options = new InfluxDBClientOptions(url)
+            {
+                Token = token,
+                Org = org,
+                Bucket = bucket_name
+            };
+
+            using var client = new InfluxDBClient(options);
+
+            var flux = $"from(bucket:\"{bucket_name}\") " +
+                $"|> range(start: 0) " +
+                $"|> filter(fn:(r) => r[\"id\"] == \"{id}\")";
+
+            var queryApi = client.GetQueryApi();
+
+            var converter = new DomainEntityConverter();
+
+            var tables = queryApi.QueryAsync(flux, "Development");
+
+            foreach (var table in tables.Result)
+            {
+                foreach (var record in table.Records)
+                {
+                    Console.WriteLine(JsonConvert.SerializeObject(converter.ConvertToEntity<Sensor>(record)));
+                }
+            }
+        }
+
+        public void DeleteData(string bucket, string organization)
+        {
+            string Token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            InfluxDBClient client = new InfluxDBClient("http://localhost:8086", Token);
+            client.GetDeleteApi().Delete(DateTime.UtcNow.AddMonths(-12), DateTime.UtcNow, "", bucket, organization);
+
+            Console.WriteLine("Successfully deleted!");
+        }
     }
 }
+    

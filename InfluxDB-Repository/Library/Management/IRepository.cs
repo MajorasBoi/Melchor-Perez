@@ -11,10 +11,14 @@ namespace Management
     {
         public Task CreateBucket();
 
-        public Task WriteData(Documents doc);
+        public Task WriteData(Sensor sensor);
 
         public void QueryAll();
 
         public void QueryByMeasurement(string measurement);
+
+        public void QueryById(int id);
+
+        public void DeleteData(string bucket, string organization);
     }
 }

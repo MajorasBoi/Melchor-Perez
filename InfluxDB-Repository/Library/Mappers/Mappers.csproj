@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Library\Models.csproj" />
-    <ProjectReference Include="..\Mappers\Mappers.csproj" />
   </ItemGroup>
 
 </Project>
