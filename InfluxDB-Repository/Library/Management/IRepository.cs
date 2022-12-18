@@ -17,10 +17,12 @@ namespace Management
 
         public void QueryByMeasurement(string measurement);
 
+        public void QueryByTimeLapse(int time, string measurement);
+
         public void QueryById(int id);
 
         public double GetAverage(string measurement);
 
-        public void DeleteData(string bucket, string organization);
+        public void DeleteData(string bucket, string organization, int days);
     }
 }

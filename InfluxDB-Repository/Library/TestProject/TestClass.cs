@@ -83,6 +83,14 @@ namespace TestProject
         }
 
         [TestMethod]
+        public void Test_QueryByTimeLapse()
+        {
+            DBRepository tdb = new DBRepository();
+
+            tdb.QueryByTimeLapse(30, "Temperature");
+        } 
+
+        [TestMethod]
         public void Test_QueryById()
         {
             int id = 5;
@@ -94,10 +102,10 @@ namespace TestProject
         [TestMethod]
         public void Test_Average()
         {
-            string measurement = "Humidity";
+            string measurement = "Temperature";
             DBRepository tdb = new DBRepository();
 
-            Assert.AreEqual(10, tdb.GetAverage(measurement));
+            Assert.AreEqual(15, tdb.GetAverage(measurement));
         }
 
         [TestMethod]
@@ -107,7 +115,7 @@ namespace TestProject
             string organization = "Development";
             DBRepository tdb = new DBRepository();
 
-            tdb.DeleteData(bucket, organization);
+            tdb.DeleteData(bucket, organization, 1);
         }
     }
 }

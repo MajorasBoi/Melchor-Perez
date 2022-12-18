@@ -150,6 +150,54 @@ namespace Management
             }
         }
 
+        public void QueryByTimeLapse(int minutes, string measurement)
+        {
+            const string url = "http://localhost:8086";
+            const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            const string org = "Development";
+            const string bucket_name = "Data Center";
+            var options = new InfluxDBClientOptions(url)
+            {
+                Token = token,
+                Org = org,
+                Bucket = bucket_name
+            };
+
+            using var client = new InfluxDBClient(options);
+
+            var flux = $"from(bucket:\"{bucket_name}\") " +
+                $"|> range(start: {minutes*-1}m) " +
+                $"|> filter(fn:(r) => r[\"_measurement\"] == \"{measurement}\")";
+
+            var queryApi = client.GetQueryApi();
+
+            var converter = new DomainEntityConverter();
+
+            var tables = queryApi.QueryAsync(flux, "Development");
+
+            double max = 0;
+            double min = 100000000;
+
+            foreach (var table in tables.Result)
+            {
+                foreach (var record in table.Records)
+                {
+                    if(converter.ConvertToEntity<Sensor>(record).Value > max)
+                    {
+                        max = converter.ConvertToEntity<Sensor>(record).Value;
+                    }
+                    if(converter.ConvertToEntity<Sensor>(record).Value < min)
+                    {
+                        min = converter.ConvertToEntity<Sensor>(record).Value;
+                    }
+                }
+            }
+
+            Console.WriteLine(measurement);
+            Console.WriteLine("Max: " + max);
+            Console.WriteLine("Min: " + min);
+        }
+
         public void QueryById(int id)
         {
             const string url = "http://localhost:8086";
@@ -233,13 +281,13 @@ namespace Management
             return avg;
         }
 
-        public void DeleteData(string bucket, string organization)
+        public void DeleteData(string bucket, string organization, int days)
         {
             string Token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
             InfluxDBClient client = new InfluxDBClient("http://localhost:8086", Token);
-            client.GetDeleteApi().Delete(DateTime.UtcNow.AddMonths(-12), DateTime.UtcNow, "", bucket, organization);
+            client.GetDeleteApi().Delete(DateTime.UtcNow.AddDays(days * (-1)), DateTime.UtcNow, "", bucket, organization);
 
-            Console.WriteLine("Successfully deleted!");
+            Console.WriteLine("Successfully deleted from " + days + "days until current time.");
         }
     }
 }
