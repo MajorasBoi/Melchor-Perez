@@ -51,7 +51,7 @@ namespace TestProject
         {
             DBRepository tdb = new DBRepository();
 
-            Sensor sensor = new Sensor(EType.Humidity, EBrand.EndressHauser, 10, "DEF", DateTime.UtcNow, 5);
+            Sensor sensor = new Sensor(EType.Humidity, EBrand.EndressHauser, 5, "DEF", DateTime.UtcNow, 5);
 
             try
             {
@@ -87,7 +87,7 @@ namespace TestProject
         {
             DBRepository tdb = new DBRepository();
 
-            tdb.QueryByTimeLapse(30, "Temperature");
+            tdb.QueryByTimeLapse(30, "Humidity");
         } 
 
         [TestMethod]

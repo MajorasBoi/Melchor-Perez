@@ -287,7 +287,7 @@ namespace Management
             InfluxDBClient client = new InfluxDBClient("http://localhost:8086", Token);
             client.GetDeleteApi().Delete(DateTime.UtcNow.AddDays(days * (-1)), DateTime.UtcNow, "", bucket, organization);
 
-            Console.WriteLine("Successfully deleted from " + days + "days until current time.");
+            Console.WriteLine("Successfully deleted from " + days + " days until current time.");
         }
     }
 }
