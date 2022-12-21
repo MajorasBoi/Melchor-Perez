@@ -21,7 +21,9 @@ namespace Management
 
         public void QueryById(int id);
 
-        public double GetAverage(string measurement);
+        public double GetAverage(int hours, string measurement);
+
+        public double GetMedian(int hours, string measurement);
 
         public void DeleteData(string bucket, string organization, int days);
     }

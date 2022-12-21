@@ -31,7 +31,7 @@ namespace TestProject
         {
             DBRepository tdb = new DBRepository();
 
-            Sensor sensor = new Sensor(EType.Temperature, EBrand.Siemens, 15, "ABC", DateTime.UtcNow, 5);
+            Sensor sensor = new Sensor(EType.Temperature, EBrand.Siemens, 20, "ABC", DateTime.UtcNow, 5);
 
             try
             {
@@ -87,7 +87,7 @@ namespace TestProject
         {
             DBRepository tdb = new DBRepository();
 
-            tdb.QueryByTimeLapse(30, "Humidity");
+            tdb.QueryByTimeLapse(30, "Temperature");
         } 
 
         [TestMethod]
@@ -105,7 +105,15 @@ namespace TestProject
             string measurement = "Temperature";
             DBRepository tdb = new DBRepository();
 
-            Assert.AreEqual(15, tdb.GetAverage(measurement));
+            Assert.AreEqual(12.5, tdb.GetAverage(1, measurement));
+        }
+
+        [TestMethod]
+        public void Test_Median()
+        {
+            DBRepository tdb = new DBRepository();
+
+            Console.WriteLine("The median is " + tdb.GetMedian(1, "Temperature"));
         }
 
         [TestMethod]

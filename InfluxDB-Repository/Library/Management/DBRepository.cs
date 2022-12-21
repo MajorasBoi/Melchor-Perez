@@ -78,7 +78,7 @@ namespace Management
             using var client = new InfluxDBClient(options);
             var converter = new DomainEntityConverter();
 
-            await client.GetWriteApiAsync(converter).WriteMeasurementAsync(sensor);
+            await client.GetWriteApiAsync(converter).WritePointAsync(converter.ConvertToPointData(sensor, WritePrecision.S), bucket_name, org);
 
             Console.WriteLine("Successfully written point!");
 
@@ -232,7 +232,7 @@ namespace Management
             }
         }
 
-        public double GetAverage(string measurement)
+        public double GetAverage(int hours, string measurement)
         {
             const string url = "http://localhost:8086";
             const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
@@ -251,7 +251,7 @@ namespace Management
             using var client = new InfluxDBClient(options);
 
             var flux = $"from(bucket:\"{bucket_name}\") " +
-                $"|> range(start: 0) " +
+                $"|> range(start: {hours*-1}h) " +
                 $"|> filter(fn:(r) => r[\"_measurement\"] == \"{measurement}\")";
 
             var queryApi = client.GetQueryApi();
@@ -273,12 +273,61 @@ namespace Management
             avg = avg / i;
 
             if (measurement == "Temperature")
-                Console.WriteLine(measurement + " average is: " + avg + "°C");
+                Console.WriteLine(measurement + " average is: " + avg + "°C from " + hours + " hours ago until now.");
             else
-                Console.WriteLine(measurement + " average percentage is: " + avg + "%");
+                Console.WriteLine(measurement + " average percentage is: " + avg + "% from " + hours + " hours ago until now.");
             
             
             return avg;
+        }
+
+        public double GetMedian(int hours, string measurement)
+        {
+            const string url = "http://localhost:8086";
+            const string token = "BcLOyY7HHsDVbRCPvJpAmLVGKLL1Rb4Dg67OJ20Pzoc51DRFo0_TW6FNIPt0gCrS_ENdQwoId20SYqJBFhJ6nw==";
+            const string org = "Development";
+            const string bucket_name = "Data Center";
+            var options = new InfluxDBClientOptions(url)
+            {
+                Token = token,
+                Org = org,
+                Bucket = bucket_name
+            };
+
+            List<double> list = new List<double>();
+
+            using var client = new InfluxDBClient(options);
+
+            var flux = $"from(bucket:\"{bucket_name}\") " +
+                $"|> range(start: {hours * -1}h) " +
+                $"|> filter(fn:(r) => r[\"_measurement\"] == \"{measurement}\")";
+
+            var queryApi = client.GetQueryApi();
+
+            var converter = new DomainEntityConverter();
+
+            var tables = queryApi.QueryAsync(flux, "Development");
+
+            foreach (var table in tables.Result)
+            {
+                foreach (var record in table.Records)
+                {
+                    list.Add(converter.ConvertToEntity<Sensor>(record).Value);
+                }
+            }
+
+            double[] arr = list.ToArray();
+            int i = arr.Length;
+            if (i % 2 == 1)
+            {
+                i = i / 2;
+                return list.ElementAt<double>(--i);
+            }
+            i = i / 2;
+            double temp1 = list.ElementAt<double>(i - 1);
+            double temp2 = list.ElementAt<double>(i);
+
+            return ((temp1 + temp2) / 2);
         }
 
         public void DeleteData(string bucket, string organization, int days)
